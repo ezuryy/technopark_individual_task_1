@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install dependencies
+        run: |
+          sudo apt install
+          sudo apt install lcov cppcheck valgrind gcovr
+          git submodule update --init
+      - name: cmake build
+        run: |
+          mkdir _builds
+          cd _builds
+          cmake ..
+          make all
+      - name: test
+        run: |
+          pwd
+          ls -la
+          cd _builds
+          ./test_restaurant
+      - name: cppcheck
+        run: |
+          cppcheck --error-exitcode=1 restaurant.c main.c
+      - name: valgrind
+        run: |
+          cd _builds
+          valgrind --leak-check=full --error-exitcode=1 ./test_restaurant
+      - name: coverage
+        run: |
+          cd _builds
+          ./test_restaurant
+          cd ..
+          gcovr -r . --exclude _builds/ --exclude main.c --html --html-details -o my_coverage.html
