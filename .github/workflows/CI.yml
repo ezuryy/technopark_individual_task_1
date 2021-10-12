@@ -28,7 +28,7 @@ jobs:
           ./test_restaurant
       - name: cppcheck
         run: |
-          cppcheck --error-exitcode=1 restaurant.c main.c
+          cppcheck --error-exitcode=1 sources/restaurant.c sources/main.c
       - name: valgrind
         run: |
           cd _builds
