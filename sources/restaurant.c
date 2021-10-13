@@ -14,6 +14,9 @@ void create_restaurant(restaurant_t* R) {
     R->guests_count = 0;
     R->capacity = 1;
     R->guests = (guest_t *) malloc(1 * sizeof(guest_t));
+    if (R->guests == NULL) {
+        delete_restaurant(R);
+    }
 }
 
 bool add_guest(restaurant_t* R, size_t table_number, const char* name, double bill) {
@@ -23,9 +26,9 @@ bool add_guest(restaurant_t* R, size_t table_number, const char* name, double bi
     if (R->guests_count == R->capacity) {
         R->capacity = 2 * R->capacity;
         R->guests = (guest_t *) realloc(R->guests, R->capacity * sizeof(guest_t));
-    }
-    if (R->guests == NULL) {
-        return false;
+        if (R->guests == NULL) {
+            return false;
+        }
     }
     R->guests[R->guests_count].table_number = table_number;
     if (name != NULL) {
@@ -45,9 +48,12 @@ void delete_restaurant(restaurant_t* R) {
         return;
     }
     for (long counter = R->guests_count - 1; counter >= 0; --counter) {
-        free(R->guests[counter].name);
+        if (R->guests[counter].name != NULL) {
+            free(R->guests[counter].name);
+        }
     }
     free(R->guests);
+    R = NULL;
 }
 
 bool bubble_sort(restaurant_t* R) {

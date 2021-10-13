@@ -36,7 +36,9 @@ void print(restaurant_t* R) {
     bubble_sort(R);
     long counter = 0;
     while (counter < R->guests_count) {
-        printf("%zi %f %s", R->guests[counter].table_number, R->guests[counter].bill, R->guests[counter].name);
+        if (R->guests[counter].name != NULL) {
+            printf("%zi %f %s", R->guests[counter].table_number, R->guests[counter].bill, R->guests[counter].name);
+        }
         counter++;
     }
 }
