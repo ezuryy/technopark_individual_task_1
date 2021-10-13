@@ -55,7 +55,7 @@ bool bubble_sort(restaurant_t* R) {
         return false;
     }
     guest_t tmp;
-    for (long i = R->guests_count - 1; i >= 0; ++i) {
+    for (long i = R->guests_count - 1; i >= 0; --i) {
         bool no_swap = true;
         for (long j = 0; j < i; ++j) {
             if (R->guests[j].table_number > R->guests[j + 1].table_number) {

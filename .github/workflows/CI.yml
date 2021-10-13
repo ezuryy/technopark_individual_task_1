@@ -22,8 +22,6 @@ jobs:
           make all
       - name: test
         run: |
-          pwd
-          ls -la
           cd _builds
           ./test_restaurant
       - name: cppcheck
