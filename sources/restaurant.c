@@ -53,7 +53,6 @@ void delete_restaurant(restaurant_t* R) {
         }
     }
     free(R->guests);
-    R = NULL;
 }
 
 bool bubble_sort(restaurant_t* R) {
