@@ -28,7 +28,7 @@ jobs:
           ./test_restaurant
       - name: cppcheck
         run: |
-          cppcheck --error-exitcode=1 sources/restaurant.c sources/main.c
+          cppcheck --error-exitcode=1 --inconclusive --language=c sources/restaurant.c tests/tests.cpp sources/main.c include/restaurant.h
       - name: valgrind
         run: |
           cd _builds
@@ -38,4 +38,9 @@ jobs:
           cd _builds
           ./test_restaurant
           cd ..
-          gcovr -r . --exclude _builds/ --exclude main.c --html --html-details -o my_coverage.html
+          gcovr -r . --exclude _builds/ --exclude sources/main.c --html --html-details -o my_coverage.html
+      - name: code_coverage_report_html
+        uses: actions/upload-artifact@v2
+        with:
+          name: codecov_report
+          path: my_coverage.html

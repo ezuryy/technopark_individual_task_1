@@ -18,12 +18,14 @@ typedef struct restaurant {
     struct guest* guests;
 } restaurant_t;
 
+bool exist(const restaurant_t* R);
+
 void create_restaurant(restaurant_t* R);
 
 bool add_guest(restaurant_t* R, size_t table_number, const char* name, double bill);
 
 void delete_restaurant(restaurant_t* R);
 
-void bubble_sort(restaurant_t* R);
+bool bubble_sort(restaurant_t* R);
 
 #endif //UNTITLED_RESTAURANT_H

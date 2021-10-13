@@ -1,11 +1,17 @@
-#include "restaurant.h"
+#include <restaurant.h>
+
+#define MAX_STR_SIZE 100
+#define MAX_DIGIT_SIZE 10
 
 void read_from_stdin(restaurant_t* R) {
-    size_t MAX_STR_SIZE = 100;
-    size_t MAX_DIGIT_SIZE = 10;
+    if (!exist(R)) {
+        return;
+    }
     char records_number[MAX_DIGIT_SIZE];
-    printf( "How many records do you want to add?\n" );
+    printf( "Enter guests count:\n" );
     fgets(records_number, MAX_DIGIT_SIZE, stdin);
+
+    printf( "Enter the table number, name and bill in different lines:\n" );
     size_t size = strtol(records_number, NULL, 10);
     size_t counter = 0;
     while (counter < size) {
@@ -23,6 +29,10 @@ void read_from_stdin(restaurant_t* R) {
 }
 
 void print(restaurant_t* R) {
+    if (!exist(R)) {
+        printf("empty\n");
+        return;
+    }
     bubble_sort(R);
     long counter = 0;
     while (counter < R->guests_count) {

@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 
 extern "C" {
-#include "restaurant.h"
+#include <restaurant.h>
 }
 
-TEST(Test1, a) {
+TEST(Test1, three_simple_guests) {
     restaurant_t R{};
     create_restaurant(&R);
     EXPECT_TRUE(add_guest(&R, 5, (const char*)"dasha", 1));
@@ -23,7 +23,7 @@ TEST(Test1, a) {
     delete_restaurant(&R);
 }
 
-TEST(Test2, b) {
+TEST(Test2, five_guests_with_fullname) {
     restaurant_t R{};
     create_restaurant(&R);
     EXPECT_TRUE(add_guest(&R, 5, (const char*)"Dasha Kidinova", 1));
@@ -48,4 +48,24 @@ TEST(Test2, b) {
     EXPECT_FALSE(strcmp(R.guests[4].name, "Dasha Kidinova"));
     EXPECT_EQ(R.guests[4].bill, 1);
     delete_restaurant(&R);
+}
+
+TEST (Test3, use_without_initialisation) {
+    restaurant_t R{};
+    EXPECT_FALSE(add_guest(nullptr, 5, (const char*)"dasha", 1.1));
+    EXPECT_FALSE(bubble_sort(nullptr));
+
+    create_restaurant(&R);
+    EXPECT_TRUE(add_guest(&R, 5, (const char*)"", 1.1));
+    EXPECT_EQ(R.guests[0].table_number, 5);
+    EXPECT_FALSE(strcmp(R.guests[0].name, ""));
+    EXPECT_EQ(R.guests[0].bill, 1.1);
+
+    EXPECT_TRUE(add_guest(&R, 5, nullptr, 1));
+    delete_restaurant(&R);
+}
+
+TEST (Test4, create_and_delete_nullptr) {
+    create_restaurant(nullptr);
+    delete_restaurant(nullptr);
 }
