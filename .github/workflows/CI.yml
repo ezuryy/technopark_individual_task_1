@@ -9,42 +9,44 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: install dependencies
+      - name: Install dependencies
         run: |
           sudo apt install
           sudo apt install lcov cppcheck valgrind gcovr
           git submodule update --init
-      - name: cmake build
+      - name: Build
         run: |
           mkdir _builds
           cd _builds
           cmake ..
           make all
-      - name: test
+      - name: Tests
         run: |
           cd _builds
           ./test_restaurant
-      - name: cppcheck
+      - name: Cppcheck
         run: |
           cppcheck --enable=all --suppress=missingInclude --error-exitcode=1 --inconclusive --language=c sources/restaurant.c sources/main.c include/restaurant.h
-      - name: valgrind
+      - name: Check valgrind
         run: |
           cd _builds
           valgrind --leak-check=full --error-exitcode=1 ./test_restaurant
-      - name: coverage
+      - name: Create coverage
         run: |
           cd _builds
           ./test_restaurant
           cd ..
           gcovr -r . --exclude _builds/ --exclude sources/main.c --html --html-details -o my_coverage.html
-      - name: code_coverage_report_html
+      - name: Code coverage report html
         uses: actions/upload-artifact@v2
         with:
           name: codecov_report
           path: my_coverage.html
       - name: Run clang-format style check
-        uses: jidicula/clang-format-action@v4.2.0
-        with:
-          clang-format-version: '13'
-          check-path: '.'
-          fallback-style: 'Google'
+        uses: DoozyX/clang-format-lint-action@v0.12
+          with:
+            source: './source ./include ./tests'
+            exclude: './_builds'
+            extensions: 'h,cpp'
+            clangFormatVersion: 12
+            style: google
