@@ -82,8 +82,9 @@ TEST(Test5, test_file) {
   file = fopen("../tests/input.txt", "r");
   read_guests(nullptr, file);
   read_guests(&R, file);
-
   testing::internal::CaptureStdout();
+  fclose(file);
+
   EXPECT_TRUE(bubble_sort(&R));
   print(&R);
   std::string output = testing::internal::GetCapturedStdout();
