@@ -1,6 +1,9 @@
 #include <restaurant.h>
 
-bool exist(const restaurant_t* R) {
+#define MAX_STR_SIZE 100
+#define MAX_DIGIT_SIZE 10
+
+static bool exist(const restaurant_t* R) {
     if (R != NULL) {
         return true;
     }
@@ -77,3 +80,35 @@ bool bubble_sort(restaurant_t* R) {
     return true;
 }
 
+void read_guests(restaurant_t* R, FILE* in) {
+    if (!exist(R)) {
+        return;
+    }
+    char table[MAX_DIGIT_SIZE];
+    while (fgets(table, MAX_DIGIT_SIZE , in)) {
+        char name[MAX_STR_SIZE];
+        char bill[MAX_DIGIT_SIZE];
+        fgets(name, MAX_STR_SIZE, in);
+        fgets(bill, MAX_DIGIT_SIZE, in);
+        long _table = strtol(table, NULL, 10);
+        double _bill = strtod(bill, NULL);
+        if (!add_guest(R, _table, name, _bill)) {
+            return;
+        }
+    }
+}
+
+void print(restaurant_t* R) {
+    if (!exist(R)) {
+        printf("empty\n");
+        return;
+    }
+    bubble_sort(R);
+    long counter = 0;
+    while (counter < R->guests_count) {
+        if (R->guests[counter].name != NULL) {
+            printf("%zi %f %s", R->guests[counter].table_number, R->guests[counter].bill, R->guests[counter].name);
+        }
+        counter++;
+    }
+}

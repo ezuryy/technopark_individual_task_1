@@ -65,7 +65,30 @@ TEST (Test3, use_without_initialisation) {
     delete_restaurant(&R);
 }
 
-TEST (Test4, create_and_delete_nullptr) {
+TEST (Test4, create_delete_print_read_nullptr) {
     create_restaurant(nullptr);
     delete_restaurant(nullptr);
+    testing::internal::CaptureStdout();
+    print(nullptr);
+    std::string output = testing::internal::GetCapturedStdout();
+    EXPECT_EQ(output, "empty\n");
+}
+
+TEST (Test5, test_file) {
+    restaurant_t R;
+    create_restaurant(&R);
+
+    FILE* file;
+    file = fopen("../tests/input.txt", "r");
+    read_guests(nullptr, file);
+    read_guests(&R, file);
+
+    testing::internal::CaptureStdout();
+    print(&R);
+    std::string output = testing::internal::GetCapturedStdout();
+    std::string answer = "1 1.900000 alena\n"
+                         "2 10.900000 dasha\n"
+                         "3 100.900000 denis\n";
+    EXPECT_EQ(output, answer);
+    delete_restaurant(&R);
 }
