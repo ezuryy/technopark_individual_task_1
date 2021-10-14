@@ -44,9 +44,9 @@ jobs:
           path: my_coverage.html
       - name: Run clang-format style check
         uses: DoozyX/clang-format-lint-action@v0.12
-          with:
-            source: './source ./include ./tests'
-            exclude: './_builds'
-            extensions: 'h,cpp'
-            clangFormatVersion: 12
-            style: google
+        with:
+          source: './source ./include ./tests'
+          exclude: './_builds'
+          extensions: 'h,cpp'
+          clangFormatVersion: 12
+          style: google
