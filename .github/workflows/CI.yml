@@ -47,6 +47,6 @@ jobs:
         with:
           source: './sources ./include ./tests'
           exclude: './_builds'
-          extensions: 'h,cpp'
+          extensions: 'h,cpp,c'
           clangFormatVersion: 12
           style: google
