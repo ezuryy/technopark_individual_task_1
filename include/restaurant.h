@@ -18,7 +18,7 @@ typedef struct restaurant {
     struct guest* guests;
 } restaurant_t;
 
-void create_restaurant(restaurant_t* R);
+bool create_restaurant(restaurant_t* R);
 
 bool add_guest(restaurant_t* R, size_t table_number, const char* name, double bill);
 
