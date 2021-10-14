@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt install
+          sudo apt install lcov cppcheck valgrind gcovr
+          git submodule update --init
+      - name: Build
+        run: |
+          mkdir _builds
+          cd _builds
+          cmake ..
+          make all
+      - name: Tests
+        run: |
+          cd _builds
+          ./test_restaurant
+      - name: Cppcheck
+        run: |
+          cppcheck --enable=all --suppress=missingInclude --error-exitcode=1 --inconclusive --language=c sources/restaurant.c sources/main.c include/restaurant.h
+      - name: Check valgrind
+        run: |
+          cd _builds
+          valgrind --leak-check=full --error-exitcode=1 ./test_restaurant
+      - name: Create coverage
+        run: |
+          cd _builds
+          ./test_restaurant
+          cd ..
+          gcovr -r . --exclude _builds/ --exclude sources/main.c --html --html-details -o my_coverage.html
+      - name: Code coverage report html
+        uses: actions/upload-artifact@v2
+        with:
+          name: codecov_report
+          path: my_coverage.html
+      - name: Run clang-format style check
+        uses: DoozyX/clang-format-lint-action@v0.12
+        with:
+          source: './sources ./include ./tests'
+          exclude: './_builds'
+          extensions: 'h,cpp,c'
+          clangFormatVersion: 12
+          style: google
